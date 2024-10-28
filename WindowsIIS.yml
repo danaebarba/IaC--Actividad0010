@@ -1,0 +1,42 @@
+---
+- hosts: Windows
+  become: yes
+  tasks:
+  
+    # Install IIS (Web-Server)
+    - name: Install IIS
+      win_feature:
+        name: Web-Server
+        state: present
+        include_management_tools: true
+
+    # Start and enable the IIS service
+    - name: Start and enable IIS service
+      win_service:
+        name: W3SVC
+        start_mode: auto
+        state: started
+
+    # Create a simple sports information webpage
+    - name: Create a sports information webpage
+      win_copy:
+        dest: "C:\\inetpub\\wwwroot\\index.html"
+        content: |
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Sports Information</title>
+          </head>
+          <body>
+              <h1>Welcome to the Sports Information Page</h1>
+              <p>Here you'll find the latest updates on various sports!</p>
+              <h2>Football</h2>
+              <p>Get all the latest football scores, news, and player stats.</p>
+              <h2>Basketball</h2>
+              <p>Catch up with the top teams, game schedules, and highlights.</p>
+              <h2>Tennis</h2>
+              <p>Stay informed with recent tournaments, player rankings, and match results.</p>
+          </body>
+          </html>
